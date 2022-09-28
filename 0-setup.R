@@ -6,9 +6,10 @@ create_dir <- function(dir) {
 }
 
 data_dir <- "data"
+cached_data <- file.path(data_dir, "cached_data")
 figures_dir <- "figures"
 results_dir <- "results"
 
-dirs <- c(data_dir, figures_dir, results_dir)
+dirs <- c(cached_data, figures_dir, results_dir)
 
 sapply(dirs, create_dir)
