@@ -34,4 +34,17 @@ combined <- wikipathway_clean |>
   unnest_wider(fixed) |>
   select(Suggested.Symbol, WikiPathway, BioPlanet, KEGG) |>
   rename(Gene = Suggested.Symbol) |>
+  mutate(
+    Datasets = case_when(
+      WikiPathway == 1 & BioPlanet == 1 & KEGG == 1 ~ "WBK",
+      WikiPathway == 1 & BioPlanet == 1 & KEGG == 0 ~ "WB",
+      WikiPathway == 1 & BioPlanet == 0 & KEGG == 1 ~ "WK",
+      WikiPathway == 0 & BioPlanet == 1 & KEGG == 1 ~ "BK",
+      WikiPathway == 0 & BioPlanet == 0 & KEGG == 1 ~ "K",
+      WikiPathway == 0 & BioPlanet == 1 & KEGG == 0 ~ "B",
+      WikiPathway == 1 & BioPlanet == 0 & KEGG == 0 ~ "W",
+      TRUE ~ NA_character_
+    ),
+    Total = WikiPathway + BioPlanet + KEGG
+  ) |>
   write_csv(file.path("results", "combined_gene_list.csv"))
