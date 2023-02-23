@@ -13,7 +13,7 @@ sheets_of_interest <- sheets |>
 sheet_names <- sheets_of_interest |>
   str_replace_all("[\\s|\\W]+", "-")
 
-sheet <- sheets_of_interest[1]
+#sheet <- sheets_of_interest[1]
 
 get_indices <- function(term_col) {
   data_start_indices <- term_col |>
@@ -29,25 +29,25 @@ get_indices <- function(term_col) {
   out
 }
 
-extract_data <- function(dataset, database, boundaries) {
+extract_data <- function(dataset, database, boundaries, sheet_name) {
   dataset_rows <- dataset[boundaries[1]:boundaries[2], ]
   colnames(dataset_rows) <- dataset[boundaries[1] - 1,]
 
   data_out <- dataset_rows |>
-    mutate(Source_Sheet = sheet,
+    mutate(Source_Sheet = sheet_name,
            Source_DB = database)
 
   data_out
 }
 
 
-parse_sheet <- function(sheet) {
+parse_sheet <- function(sheet, sheet_name) {
   sheet_raw <- read_excel(raw_file, sheet, col_names = FALSE)
 
   data_boundaries <- get_indices(sheet_raw$...1)
 
   parsed <- data_boundaries |>
-    imap( ~ extract_data(sheet_raw, .y, .x))
+    imap( ~ extract_data(sheet_raw, .y, .x, sheet_name))
 
   parsed
 }
@@ -66,7 +66,7 @@ write_multiple_csvs <- function(multidata, prefix, directory) {
 
 parsed_sheets <- sheets_of_interest |>
   set_names(sheet_names) |>
-  map(parse_sheet) |>
+  imap(~ parse_sheet(.x, .y)) |>
   imap(~ write_multiple_csvs(.x, .y, file.path("data", "cached_data")))
 
 bioplanet <- parsed_sheets |>
