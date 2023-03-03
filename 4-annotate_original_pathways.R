@@ -4,7 +4,7 @@ library(tidyverse)
 library(HGNChelper)
 
 gene_list <- read_csv("results/combined_gene_list.csv") |>
-  filter(Datasets == "WBK") |>
+  filter(str_detect(Datasets, "K")) |>
   select(Gene)
 
 humans <- getCurrentHumanMap()
