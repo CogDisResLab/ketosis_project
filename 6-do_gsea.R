@@ -33,7 +33,9 @@ perform_gsea <- function(filepath) {
   gsea |>
     write_csv(outfile_path)
 
+  gsea
+
 }
 
-files |>
-  walk(perform_gsea)
+gseas <- files |>
+  map(perform_gsea)
