@@ -28,12 +28,13 @@ perform_gsea <- function(filepath) {
     arrange(desc(value)) |>
     deframe()
 
-  gsea <- fgsea(pathways, dge, minSize = 15, maxSize = 500, nPermSimple = 50000)
+  gsea <- fgsea(pathways, dge, minSize = 15, maxSize = 500, nPermSimple = 500000)
 
-  gsea |>
+  out <- gsea |>
+    mutate(LEGenes = str_c(leadingEdge, collapse = ", ")) |>
     write_csv(outfile_path)
 
-  gsea
+  out
 
 }
 
