@@ -30,11 +30,12 @@ perform_gsea <- function(filepath) {
 
   gsea <- fgsea(pathways, dge, minSize = 15, maxSize = 500, nPermSimple = 500000)
 
-  out <- gsea |>
-    mutate(LEGenes = str_c(leadingEdge, collapse = ", ")) |>
+  gsea |>
+    mutate(LEGenes = map_chr(leadingEdge, ~ str_c(.x, collapse = ", "))) |>
+    select(-leadingEdge) |>
     write_csv(outfile_path)
 
-  out
+  gsea
 
 }
 
