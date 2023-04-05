@@ -23,8 +23,8 @@ perform_gsea <- function(filepath) {
   )
 
   dge <- read_csv(filepath, show_col_types = FALSE) |>
-    mutate(value = logFC * -log10(PValue)) |>
-    select(gene_name, value) |>
+    mutate(value = LFC) |>
+    select(Name_GeneSymbol, value) |>
     arrange(desc(value)) |>
     deframe()
 
@@ -43,4 +43,4 @@ perform_gsea <- function(filepath) {
 gseas <- files |>
   map(perform_gsea)
 
-saveRDS(gseas, "results/gsea/ramaker.RDS")
+saveRDS(gseas, "results/gsea/ramaker_L1000.RDS")
