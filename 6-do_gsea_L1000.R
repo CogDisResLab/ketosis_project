@@ -43,4 +43,4 @@ perform_gsea <- function(filepath) {
 gseas <- files |>
   map(perform_gsea)
 
-saveRDS(gseas, "results/gsea/ramaker_L1000.RDS")
+saveRDS(gseas, "results/gsea_ramaker/ramaker_L1000.RDS")
